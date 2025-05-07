@@ -15,7 +15,8 @@ def process(directoryName):
             fig = plt.figure() 
             ax1 = fig.add_subplot(221)
             imshow(img_new)
-            plt.title('Grayscale Format') 
-            imsave(os.getcwd() + "/output/" + filenamestr +"-" + helper.generateRandomName() + "_modified.jpeg", (img_new*255).astype(np.uint8))
+            plt.title('Grayscale Format')
+            imsave(os.getcwd() + "/output/" + filenamestr + "-" + helper.generateRandomName() + "_modified.jpeg", (img_new * 255).astype(np.uint8))
+            plt.close(fig)  # added to release memory
         else:
             continue
