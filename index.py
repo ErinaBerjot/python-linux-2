@@ -1,20 +1,22 @@
 import bottle
-from bottle import route, run, Response, template
-import json
+from bottle import route, run, template
+import threading
 import image
 
 def call_service():
+    # Run image processing on the given directory
     directoryName = 'photos'
     image.process(directoryName)
 
 @route('/')
 def index():
-    """Home page"""
-    title = "Image Processor App"
-    call_service()
-    return template('index.tpl',data="Request completed!", title=title)
+    # Start image processing in a background thread to avoid blocking the response
+    threading.Thread(target=call_service).start()
+    return template('index.tpl', data="Processing started!", title="Image Processor App")
 
 if __name__ == '__main__':
-	run(host='0.0.0.0', port=8000, debug=False, reloader=True)
-	
+    # Production-safe: debug is off, reloader is not needed
+    run(host='0.0.0.0', port=8000, debug=False)
+
+# Export the WSGI application
 serverApp = bottle.default_app()
